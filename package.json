@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "node telnet client for biamp server",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soapgu/node-biamp-client.git"
+  },
+  "homepage": "https://github.com/soapgu/node-biamp-client",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
