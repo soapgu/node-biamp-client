@@ -1,0 +1,14 @@
+{
+  "name": "@shgbit/biamp-client",
+  "version": "1.0.0",
+  "description": "node telnet client for biamp server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "biamp"
+  ],
+  "author": "guhui@shgbit.com",
+  "license": "ISC"
+}
