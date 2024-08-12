@@ -41,7 +41,7 @@ class MatrixMixerBlock extends BiampBlock{
      * @returns 
      */
     getOutputLabel(index){
-        return super.buildCommand(BiampBlock.get,"inputLabel",'string',index);
+        return super.buildCommand(BiampBlock.get,"outputLabel",'string',index);
     }
 
     /**

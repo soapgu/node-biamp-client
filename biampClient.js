@@ -4,15 +4,21 @@ const TtpRequest = require('./ttpRequest');
 const deviceBlock = require('./deviceBlock');
 
 class BiampClient {
+
+    /**
+     * 内部执行队列
+     */
+    #queue
+
     /**
      * 构造函数
      * @param {string} ip 
      * @param {string} name 
      */
-    constructor(ip,name){
+    constructor(ip,name='default'){
         this.ip = ip;
         this.name = name;
-        this.queue = [];
+        this.#queue = [];
     }
 
     static get input() { return 'Input'; }
@@ -184,7 +190,7 @@ class BiampClient {
      */
     #enqueue(task) {
         return new Promise((resolve) => {
-            this.queue.push({
+            this.#queue.push({
                 task,
                 resolve
             });
@@ -192,14 +198,14 @@ class BiampClient {
     }
 
     #processQueue() {
-        if (this.queue.length > 0 && !this.queue[0].processing) {
+        if (this.#queue.length > 0 && !this.#queue[0].processing) {
             //console.log("process task")
-            const { task, resolve } = this.queue[0];
-            this.queue[0].processing = true;
+            const { task, resolve } = this.#queue[0];
+            this.#queue[0].processing = true;
             //console.log(task);
             task()
                 .then(result => {
-                    this.queue.shift(); // 移除已完成的任务
+                    this.#queue.shift(); // 移除已完成的任务
                     resolve(result);
                     this.#processQueue(); // 处理下一个任务
                 });
