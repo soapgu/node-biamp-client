@@ -15,5 +15,9 @@
     "biamp"
   ],
   "author": "guhui@shgbit.com",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "winston": "^3.14.1"
+  }
 }
