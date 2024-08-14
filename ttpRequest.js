@@ -3,12 +3,17 @@ const value_left = '"value":';
 class TtpRequest{
 
     /**
+     * @type {string}
+     */
+    #command
+
+    /**
      * 
      * @param {string} command 
      * @param {string} responType 
      */
     constructor( command,responType ){
-        this.command = command;
+        this.#command = command;
         this.responType = responType;
         this.finished = false;
         this.success = false;
@@ -16,8 +21,24 @@ class TtpRequest{
     }
 
     /**
+     * 获取发送字符串
+     */
+    get sendString(){
+        return this.#command + '\n';
+    }
+
+    /**
+     * 检查命令是否已经收到
+     * @param {string} response 
+     */
+    checkCommandReceived( response ){
+        return this.#command === response;
+    }
+
+    /**
      * 解析返回
      * @param {string} response 
+     * @returns {boolean}
      */
     parseValue( response ){
         //console.log( response );
@@ -36,6 +57,7 @@ class TtpRequest{
                     this.result = valueStr.slice(1, -1);
             }
         }
+        return this.finished;
         
     }
 }

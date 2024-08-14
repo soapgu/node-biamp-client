@@ -1,7 +1,8 @@
 const net = require('node:net');
 const logger = require('./logger').child({ category: '', module: 'BiampClient' });
 const TtpRequest = require('./ttpRequest');
-const deviceBlock = require('./deviceBlock');
+const DeviceBlock = require('./deviceBlock');
+const BatchTtpRequest = require('./batchTtpRequest');
 
 class BiampClient {
 
@@ -116,9 +117,18 @@ class BiampClient {
 
     /**
      * Ttp请求对象
-     * @param {TtpRequest} request 
+     * @param {...TtpRequest} requests 
      */
-    sendTTPPlus( request ){
+    sendTTPPlus( ...requests ){
+        let request;
+        if( requests.length > 1 ){
+            request = new BatchTtpRequest(requests);
+        } else {
+            request = requests[0];
+        }
+        //console.log( requests );
+        //console.log( request );
+
         let task = ()=> new Promise((resolve, _reject) => {
             let buffer = "";
             const cmdResponse = (data) =>{
@@ -128,22 +138,24 @@ class BiampClient {
                 logger.debug(`Received: ${responseString}`);
                 buffer += responseString;
                 if( buffer.includes('\r\n') ){
-                    const commands = buffer.split('\r\n')
-                    for (let i = 0; i < commands.length - 1; i++) {
-                        const command = commands[i];
-                        if( command == request.command ){
+                    const lines = buffer.split('\r\n')
+                    for (let i = 0; i < lines.length - 1; i++) {
+                        const line = lines[i];
+                        if( request.checkCommandReceived(line) ){
                             logger.debug('cmd received')
                         } else {
-                            if( command.startsWith('+OK') || command.startsWith('-ERR') ){
-                                this.client.removeListener('data',cmdResponse);
-                                this.client.removeListener('timeout',timeoutCallback);
-                                request.parseValue(command);
-                                resolve(request);
-                                break;
+                            if( line.startsWith('+OK') || line.startsWith('-ERR') ){
+                                let over = request.parseValue(line);
+                                if( over ){
+                                    this.client.removeListener('data',cmdResponse);
+                                    this.client.removeListener('timeout',timeoutCallback);
+                                    resolve(request);
+                                    break;
+                                }
                             }
                         }        
                     }
-                    buffer = commands[commands.length - 1];
+                    buffer = lines[lines.length - 1];
                 }
             };
             const timeoutCallback = ()=>{
@@ -158,7 +170,8 @@ class BiampClient {
             this.client.setTimeout(1000);
             this.client.on("timeout",timeoutCallback);
             this.client.on("data", cmdResponse )
-            this.client.write( request.command + '\n', (err)=>{
+            logger.debug(`sent data:${request.sendString}` );
+            this.client.write( request.sendString, (err)=>{
                 if(err){
                     logger.error( "error send ttp" , err);
                 } else {
@@ -172,10 +185,10 @@ class BiampClient {
     }
 
     /**
-     * @param {TtpRequest} request 
+     * @param {...TtpRequest} requests 
      */
-    async sendTTPSimple(request){
-        let response = await this.sendTTPPlus(request);
+    async sendTTPSimple(...requests){
+        let response = await this.sendTTPPlus(...requests);
         if( response.success ){
             return response.result;
         } else {
@@ -218,24 +231,9 @@ class BiampClient {
      */
     async querySerialNumber()
     {
-        let request = deviceBlock.getSerialNumber();
-        let response = await this.sendTTPPlus(request)
+        let request = DeviceBlock.getSerialNumber();
+        let response = await this.sendTTPPlus(request);
         return response.result;
-    }
-
-    async test(){
-        const start = process.hrtime.bigint();
-        for( let i=1;i<= 36;i++ ){
-            for( let j=1;j <= 36;j++ ){
-                let state = await this.queryMixerState(i,j);
-                logger.info(`input:${i} output:${j} queryMixerState result:${state}`);
-            }
-        }
-        const end = process.hrtime.bigint();
-        const elapsedTime = end - start;
-        const elapsedMilliseconds = Number(elapsedTime) / 1_000_000;
-        console.log(`执行耗时: ${elapsedMilliseconds} 毫秒`);
-        return true;
     }
 
     #sendHexData(hexString) {
