@@ -22,10 +22,6 @@ class BiampClient {
         this.#queue = [];
     }
 
-    static get input() { return 'Input'; }
-
-    static get output() { return 'Output'; }
-
     /**
      * 连接bimap服务器并完成握手和接收欢迎信息
      * @returns {Promise<boolean>}

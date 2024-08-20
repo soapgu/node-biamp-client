@@ -15,7 +15,7 @@ class MatrixMixerBlock extends BiampBlock{
      * @returns 
      */
     getInputCount(){
-        return super.buildCommand(BiampBlock.get,"numInputs",'number');
+        return super.buildCommand(BiampBlock.get,"numInputs",BiampBlock.number);
     }
 
     /**
@@ -23,7 +23,7 @@ class MatrixMixerBlock extends BiampBlock{
      * @returns 
      */
     getOutputCount(){
-        return super.buildCommand(BiampBlock.get,"numOutputs",'number');
+        return super.buildCommand(BiampBlock.get,"numOutputs",BiampBlock.number);
     }
 
     /**
@@ -32,7 +32,7 @@ class MatrixMixerBlock extends BiampBlock{
      * @returns 
      */
     getInputLabel(index){
-        return super.buildCommand(BiampBlock.get,"inputLabel",'string',index);
+        return super.buildCommand(BiampBlock.get,"inputLabel",BiampBlock.string,index);
     }
 
     /**
@@ -41,7 +41,7 @@ class MatrixMixerBlock extends BiampBlock{
      * @returns 
      */
     getOutputLabel(index){
-        return super.buildCommand(BiampBlock.get,"outputLabel",'string',index);
+        return super.buildCommand(BiampBlock.get,"outputLabel",BiampBlock.string,index);
     }
 
     /**
@@ -51,7 +51,7 @@ class MatrixMixerBlock extends BiampBlock{
      * @returns 
      */
     getCrosspointLevelState( input,output ){
-        return super.buildCommand(BiampBlock.get,'crosspointLevelState','boolean',input,output);
+        return super.buildCommand(BiampBlock.get,'crosspointLevelState',BiampBlock.boolean,input,output);
     }
 
     /**
@@ -62,7 +62,7 @@ class MatrixMixerBlock extends BiampBlock{
      * @returns 
      */
     setCrosspointLevelState( input,output,value ){
-        return super.buildCommand(BiampBlock.set,'crosspointLevelState','undefined',input,output,value);
+        return super.buildCommand(BiampBlock.set,'crosspointLevelState',BiampBlock.undefined,input,output,value);
     }
 }
 

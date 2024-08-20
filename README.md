@@ -129,6 +129,31 @@ batch query CrosspointLevelState timming: 3266.358083 ms
 
 ### less than expected:(，A little bit of acceleration is better than nothing
 
+### More performence test
+Query 36 ✖️ 36 all CrosspointLevelState
+
+```
+normal query CrosspointLevelState timming: 22890.746916 ms
+batch query CrosspointLevelState timming: 11128.11425 ms
+```
+### 22890.746916 ms -> 11128.11425 ms 100% acceleration
+
+## direct excute ttp 
+
+you can direct excute ttp when you are familiar with TTP command.
+
+for example
+```javascript
+let mute = await client.sendTTPSimple( common.buildCommand('Mixer1',BiampBlock.get,'inputMute',BiampBlock.boolean,1) );
+        let label = await client.sendTTPSimple( common.buildCommand('Mixer1',BiampBlock.get,'inputLabel',BiampBlock.string,1) );
+        console.log(`MatrixMixer mute:${mute}  label:${label}`);
+```
+result
+```
+MatrixMixer mute:false  label:1-104
+```
+
+
 ## Related Links
 
 ### Biamp-Client-Demo

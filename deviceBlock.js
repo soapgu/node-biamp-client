@@ -12,7 +12,7 @@ class DeviceBlock extends BiampBlock {
      * @returns {TtpRequest}
      */
     getSerialNumber(){
-       return super.buildCommand( BiampBlock.get, 'serialNumber','string'); 
+       return super.buildCommand( BiampBlock.get, 'serialNumber',BiampBlock.string); 
     }
 }
 module.exports = new DeviceBlock();

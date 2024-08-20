@@ -9,12 +9,46 @@ class BiampBlock{
         this.instanceTag = instanceTag;
     }
 
+    /**
+     * action get
+     */
     static get get() {
         return 'get';
     }
 
+    /**
+     * action set
+     */
     static get set() {
         return 'set';
+    }
+
+    /**
+     * reponseType string
+     */
+    static get string(){
+        return 'string';
+    }
+
+    /**
+     * reponseType boolean
+     */
+    static get boolean(){
+        return 'boolean';
+    }
+
+    /**
+     * reponseType number
+     */
+    static get number(){
+        return 'number';
+    }
+
+    /**
+     * reponseType undefined
+     */
+    static get undefined(){
+        return 'undefined';
     }
 
     /**

@@ -1,4 +1,5 @@
 const value_left = '"value":';
+const BiampBlock = require('./biampBlock')
 
 class TtpRequest{
 
@@ -44,16 +45,16 @@ class TtpRequest{
         //console.log( response );
         this.finished = true;
         this.success = response.startsWith('+OK');
-        if( this.responType !== 'undefined' ){
+        if( this.responType !== BiampBlock.undefined ){
             let valueStr = response.substring( response.indexOf(value_left) + value_left.length );
             switch( this.responType ){
-                case 'number':
+                case BiampBlock.number:
                     this.result = Number(valueStr);
                     break;
-                case 'boolean':
+                case BiampBlock.boolean:
                     this.result = valueStr === 'true';
                     break;
-                case 'string':
+                case BiampBlock.string:
                     this.result = valueStr.slice(1, -1);
             }
         }
