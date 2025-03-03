@@ -27,6 +27,7 @@ class BiampClient {
      * @returns {Promise<boolean>}
      */
     makeConnect(){
+        this.#queue = [];
         return new Promise((resolve, _reject) => {
             logger.info(`${this.name}...connect...`);
             this.client = net.createConnection(23,this.ip,()=>{
@@ -170,6 +171,8 @@ class BiampClient {
             this.client.write( request.sendString, (err)=>{
                 if(err){
                     logger.error( "error send ttp" , err);
+                    request.err = `send ttp error:${err.message}`;
+                    resolve(request);
                 } else {
                     logger.debug("sent ok");
                 }
